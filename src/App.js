@@ -2,6 +2,7 @@ import { Link, Routes, Route, Outlet } from "react-router-dom";
 import { HomeContainer } from "./containers/HomeContainer";
 import { WishlistContainer } from "./containers/WishlistContainer";
 import { StatsContainer } from "./containers/StatsContainer";
+
 import "./styles.css";
 
 function App() {
