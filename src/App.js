@@ -3,7 +3,10 @@ import { HomeContainer } from "./containers/HomeContainer";
 import { WishlistContainer } from "./containers/WishlistContainer";
 import { StatsContainer } from "./containers/StatsContainer";
 
+import { ToastContainer } from "react-toastify";
+
 import "./styles.css";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -21,6 +24,7 @@ function App() {
         <Route path="stats" element={<StatsContainer />} />
       </Routes>
       <Outlet />
+      <ToastContainer />
     </>
   );
 }
