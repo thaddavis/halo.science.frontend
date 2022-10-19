@@ -16,6 +16,15 @@ export const wishlist = (state = initialState, action) => {
         wishlistUpdatedAt: action.payload,
       };
     }
+    case "setOwnedBooks": {
+      console.log("reducer");
+      debugger;
+
+      return {
+        ...state,
+        ownedBooks: action.payload,
+      };
+    }
     default:
       return state;
   }

@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import {
   setWishListUpdatedAt,
   addOwnedBook,
+  setOwnedBooks,
 } from "../redux/actions/wishlist_actions";
 
 import { toast } from "react-toastify";
@@ -22,7 +23,11 @@ export const Wishlist = () => {
   const counter = useSelector((state) => state.counter);
   const { id } = useSelector((state) => state.user);
   // * PR REVIEW * you need to first access the slice of the reducer before getting the `wishlistUpdatedAt` ie: `state.wishlist.wishlistUpdatedAt` property
-  const { wishlistUpdatedAt } = useSelector((state) => state.wishlist);
+  const { wishlistUpdatedAt, ownedBooks } = useSelector(
+    (state) => state.wishlist
+  );
+
+  console.log("___ ___", ownedBooks);
 
   const dispatch = useDispatch();
 
@@ -60,12 +65,21 @@ export const Wishlist = () => {
       }
     );
 
-    const { wishlist, og_wishlist, id: wishlist_id, authors } = response.data;
+    const {
+      owned_books,
+      wishlist,
+      og_wishlist,
+      id: wishlist_id,
+      authors,
+    } = response.data;
+
+    debugger;
 
     setItems(wishlist);
     setOGItems(og_wishlist);
     setWishlistId(wishlist_id);
     setAuthors(authors);
+    dispatch(setOwnedBooks(owned_books));
   }
 
   const handleRemove = async (r) => {
@@ -124,7 +138,7 @@ export const Wishlist = () => {
       className="container"
       style={{ backgroundColor: theme === "normal" ? "white" : "black" }}
     >
-      <h1 className="title">My Wishlist</h1>
+      <h1>My Wishlist</h1>
       <div>
         {items.map((item, index) => (
           <div key={ogItems[index].id} className="wishlist-item">
@@ -145,6 +159,14 @@ export const Wishlist = () => {
             >
               Remove
             </button>
+          </div>
+        ))}
+      </div>
+      <h2>Owned Books</h2>
+      <div>
+        {ownedBooks.map((item, index) => (
+          <div key={ownedBooks[index].id} className="wishlist-item">
+            <div>{index}</div>
           </div>
         ))}
       </div>
