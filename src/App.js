@@ -20,8 +20,8 @@ function App() {
       </nav>
       <Routes>
         <Route path="/" element={<HomeContainer />} />
-        <Route path="wishlist" element={<WishlistContainer />} />
-        <Route path="stats" element={<StatsContainer />} />
+        <Route path="/wishlist" element={<WishlistContainer />} />
+        <Route path="/stats" element={<StatsContainer />} />
       </Routes>
       <Outlet />
       <ToastContainer />

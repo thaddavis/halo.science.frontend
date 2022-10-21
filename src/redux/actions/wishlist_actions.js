@@ -1,24 +1,19 @@
 import axios from "axios";
 import get from "lodash.get";
 
-export const addOwnedBook = (book) => {
-  console.log("addOwnedBook", book);
-
+export const addOwnedBook = (wishlist_item) => {
   return async function (dispatch, getState) {
-    console.log("thunk", getState());
-
     let state = getState();
     let user_id = get(state, "user.id", null);
 
     const response = await axios.post(
       `${process.env.REACT_APP_SERVER_HOST}/owned_books`,
       {
-        book_id: book.id,
+        book_id: wishlist_item.book_id,
         user_id: user_id,
+        wishlist_item_id: wishlist_item.id,
       }
     );
-
-    console.log(response);
 
     dispatch({
       type: "addOwnedBook",
@@ -27,16 +22,9 @@ export const addOwnedBook = (book) => {
   };
 };
 
-export const setWishListUpdatedAt = () => ({
-  type: "setWishListUpdatedAt",
-  payload: new Date(),
-});
-
-export const setOwnedBooks = (ownedBooks) => {
-  console.log("setOwnedBooks", ownedBooks);
-
+export const setWishListState = (state) => {
   return {
-    type: "setOwnedBooks",
-    payload: ownedBooks,
+    type: "setWishListState",
+    payload: state,
   };
 };
