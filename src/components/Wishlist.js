@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
+import get from "lodash.get";
 import {
-  addOwnedBook,
+  addOwnedWish,
+  removeOwnedWish,
   setWishListState,
 } from "../redux/actions/wishlist_actions";
 
@@ -52,28 +54,21 @@ export const Wishlist = () => {
       }
     );
 
-    const {
-      owned_books,
-      wishlist,
-      og_wishlist,
-      id: wishlist_id,
-      authors,
-    } = response.data;
+    const { updated_at, id: wishlist_id, items } = response.data;
 
     dispatch(
       setWishListState({
-        ownedBooks: owned_books,
-        wishlist,
-        ogItems: og_wishlist,
-        wishlistId: wishlist_id,
-        authors,
-        wishlistUpdatedAt: new Date(),
+        items: items,
+        id: wishlist_id,
+        updatedAt: updated_at,
       })
     );
   }
 
-  const handleRemove = async (r) => {
-    let id = wishlistState && wishlistState.ogItems[r].id;
+  const handleRemove = async (item) => {
+    console.log("r", item);
+
+    let id = item.id;
 
     await axios.delete(
       `${process.env.REACT_APP_SERVER_HOST}/wishlist_items/${id}`
@@ -82,17 +77,26 @@ export const Wishlist = () => {
     fetch();
   };
 
-  const markAsOwned = (index) => {
-    dispatch(addOwnedBook(wishlistState && wishlistState.ogItems[index]));
+  const markAsOwned = (item) => {
+    console.log("item", item);
+
+    dispatch(addOwnedWish(item));
+  };
+
+  const removeAsOwned = (item) => {
+    console.log("item", item);
+
+    dispatch(removeOwnedWish(item));
   };
 
   const handleSubmit = async () => {
     try {
       await axios.post(`${process.env.REACT_APP_SERVER_HOST}/wishlist_items`, {
         wishlist: {
-          wishlist_id: wishlistState && wishlistState.wishlistId,
+          wishlist_id: wishlistId,
           title,
           author,
+          thing_type: "Book",
         },
       });
 
@@ -103,53 +107,67 @@ export const Wishlist = () => {
     }
   };
 
+  const wishlistItems = get(wishlistState, "items", []);
+  const wishlistLastUpdatedAt = get(wishlistState, "updatedAt", null);
+  const wishlistId = get(wishlistState, "id", null);
+
   return (
     <div className="container" style={{ backgroundColor: "white" }}>
-      <h1>My Wishlist</h1>
+      <h1>
+        My Wishlist &nbsp;
+        <small className="hint">
+          {wishlistLastUpdatedAt && wishlistLastUpdatedAt.toString()}
+        </small>
+      </h1>
       <div>
-        {wishlistState &&
-          wishlistState.items &&
-          wishlistState.items.map((item, index) => {
-            return (
-              <div
-                key={wishlistState && wishlistState.items[index].id}
-                className="wishlist-item"
-              >
-                <div>
-                  "{item.title}" by{" "}
-                  {wishlistState && wishlistState.authors[index].last_name}
-                </div>
+        {wishlistItems.map((item) => {
+          return (
+            <div key={item.id} className="wishlist-item">
+              <div>
+                {get(item, "wish_type", null)} - "
+                {get(item, "wish_val.book.title", null)}" by{" "}
+                {get(item, "wish_val.author.first_name", null)}
+              </div>
+              {!get(item, "owned", false) && (
                 <button
                   type="button"
-                  onClick={() => markAsOwned(index)}
+                  onClick={() => markAsOwned(item)}
                   className="button wishlist-button"
                 >
                   I Own This
                 </button>
+              )}
+              <button
+                type="button"
+                onClick={() => handleRemove(item)}
+                className="button wishlist-button"
+              >
+                Remove
+              </button>
+            </div>
+          );
+        })}
+      </div>
+      <h2>Owned Books (Fulfilled)</h2>
+      <div>
+        {wishlistItems.map((item) => {
+          if (item.owned) {
+            return (
+              <div key={item.id} className="wishlist-item">
+                <div>{get(item, "wish_val.book.title")}</div>
                 <button
                   type="button"
-                  onClick={() => handleRemove(index)}
+                  onClick={() => removeAsOwned(item)}
                   className="button wishlist-button"
                 >
-                  Remove
+                  Not Anymore!
                 </button>
               </div>
             );
-          })}
-      </div>
-      <h2>Owned Books</h2>
-      <div>
-        {wishlistState &&
-          wishlistState.ownedBooks &&
-          wishlistState.ownedBooks.map((item, index) => (
-            <div
-              key={wishlistState.ownedBooks[index].id}
-              className="wishlist-item"
-            >
-              <div>{wishlistState.ownedBooks[index].id}</div>&nbsp;
-              <div>{wishlistState.ownedBooks[index].title}</div>
-            </div>
-          ))}
+          }
+
+          return null;
+        })}
       </div>
       <form onSubmit={handleSubmit} className="form">
         <input
@@ -167,15 +185,10 @@ export const Wishlist = () => {
         <button onClick={handleSubmit} type="button" className="button">
           Submit
         </button>
-        {inputsAllSpacesRef.current && (
+        {/* {inputsAllSpacesRef.current && (
           <div className="hint">Press escape to clear the fields</div>
-        )}
+        )} */}
       </form>
-      <div className="hint">
-        {wishlistState &&
-          wishlistState.wishlistUpdatedAt &&
-          wishlistState.wishlistUpdatedAt.toString()}
-      </div>
     </div>
   );
 };

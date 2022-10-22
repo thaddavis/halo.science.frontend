@@ -1,6 +1,6 @@
 const initialState = {
   ownedBooks: [],
-  wishlistUpdatedAt: new Date("2022-1-1"),
+  wishlistUpdatedAt: new Date(),
   items: [],
   authors: [],
   wishlistId: null,
@@ -8,21 +8,21 @@ const initialState = {
 
 export const wishlist = (state = initialState, action) => {
   switch (action.type) {
-    case "addOwnedBook": {
+    case "addOwnedWish": {
       return {
         ...state,
         ownedBooks: [...state.ownedBooks, action.payload],
       };
     }
+    case "removeOwnedWish": {
+      return state;
+    }
     case "setWishListState": {
       return {
         ...state,
-        wishlistUpdatedAt: new Date("2022-1-1"),
-        items: action.payload.wishlist,
-        ogItems: action.payload.ogItems,
-        authors: action.payload.authors,
-        wishlistId: action.payload.wishlistId,
-        ownedBooks: action.payload.ownedBooks,
+        updatedAt: action.payload.updatedAt,
+        items: action.payload.items,
+        id: action.payload.id,
       };
     }
     default:
