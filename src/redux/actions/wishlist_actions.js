@@ -45,7 +45,7 @@ export const addOwnedWish = (wishlist_item) => {
       let state = getState();
       let user_id = get(state, "user.id", null);
 
-      await axios.post(`${process.env.REACT_APP_SERVER_HOST}/owned_books`, {
+      await axios.post(`${process.env.REACT_APP_SERVER_HOST}/owned_wishes`, {
         book_id: get(wishlist_item, "wish_val.book.id", null),
         user_id: user_id,
         wish_id: get(wishlist_item, "id", null),
@@ -65,7 +65,7 @@ export const removeOwnedWish = (wishlist_item) => {
       let owned_id = get(wishlist_item, "owned_id", null);
 
       await axios.delete(
-        `${process.env.REACT_APP_SERVER_HOST}/owned_books/${owned_id}`
+        `${process.env.REACT_APP_SERVER_HOST}/owned_wishes/${owned_id}`
       );
 
       dispatch(getWishListState());

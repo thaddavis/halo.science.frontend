@@ -1,6 +1,6 @@
 const initialState = {
   ownedBooks: [],
-  wishlistUpdatedAt: new Date(),
+  updatedAt: new Date(),
   items: [],
   authors: [],
   wishlistId: null,
