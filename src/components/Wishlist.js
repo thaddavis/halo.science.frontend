@@ -10,14 +10,9 @@ import {
   getWishListState,
 } from "../redux/actions/wishlist_actions";
 
-import { toast } from "react-toastify";
-
 export const Wishlist = () => {
   const [title, setTitle] = useState("");
-
-  const inputsAllSpacesRef = useRef(false);
   const wishlistState = useSelector((state) => state.wishlist);
-  const { id } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
 
@@ -35,26 +30,6 @@ export const Wishlist = () => {
       document.removeEventListener("keyup", handleKeypress);
     };
   }, []);
-
-  useEffect(() => {
-    if (title.length && !title.trim()) {
-      inputsAllSpacesRef.current = true;
-    } else {
-      inputsAllSpacesRef.current = false;
-    }
-  }, [title]);
-
-  const handleRemove = async (item) => {
-    console.log("r", item);
-
-    let id = item.id;
-
-    await axios.delete(
-      `${process.env.REACT_APP_SERVER_HOST}/wishlist_items/${id}`
-    );
-
-    dispatch(getWishListState());
-  };
 
   const wishlistItems = get(wishlistState, "items", []);
   const wishlistLastUpdatedAt = get(wishlistState, "updatedAt", null);
@@ -88,7 +63,7 @@ export const Wishlist = () => {
               )}
               <button
                 type="button"
-                onClick={() => handleRemove(item)}
+                onClick={() => dispatch(removeWish(item))}
                 className="button wishlist-button"
               >
                 Remove
@@ -97,7 +72,7 @@ export const Wishlist = () => {
           );
         })}
       </div>
-      <h2>Owned Books (Fulfilled)</h2>
+      <h2>Owned Wishes</h2>
       <div>
         {wishlistItems.map((item) => {
           if (item.owned) {
@@ -121,7 +96,7 @@ export const Wishlist = () => {
       <form className="form">
         <input
           type="text"
-          placeholder="Enter book title"
+          placeholder="What would you like?"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
@@ -138,9 +113,6 @@ export const Wishlist = () => {
         >
           Submit
         </button>
-        {/* {inputsAllSpacesRef.current && (
-          <div className="hint">Press escape to clear the fields</div>
-        )} */}
       </form>
     </div>
   );

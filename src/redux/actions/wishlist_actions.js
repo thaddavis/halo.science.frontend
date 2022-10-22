@@ -23,6 +23,22 @@ export const addWish = (wishlistId, wishType, wishVal) => {
   };
 };
 
+export const removeWish = (item) => {
+  return async function (dispatch, getState) {
+    try {
+      console.log("r", item);
+      let id = item.id;
+      await axios.delete(
+        `${process.env.REACT_APP_SERVER_HOST}/wishlist_items/${id}`
+      );
+
+      dispatch(getWishListState());
+    } catch (e) {
+      toast.error(`Error: ${e.code}`);
+    }
+  };
+};
+
 export const addOwnedWish = (wishlist_item) => {
   return async function (dispatch, getState) {
     try {
