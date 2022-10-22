@@ -8,15 +8,6 @@ const initialState = {
 
 export const wishlist = (state = initialState, action) => {
   switch (action.type) {
-    case "addOwnedWish": {
-      return {
-        ...state,
-        ownedBooks: [...state.ownedBooks, action.payload],
-      };
-    }
-    case "removeOwnedWish": {
-      return state;
-    }
     case "setWishListState": {
       return {
         ...state,

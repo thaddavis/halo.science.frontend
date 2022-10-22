@@ -5,14 +5,15 @@ import get from "lodash.get";
 import {
   addOwnedWish,
   removeOwnedWish,
-  setWishListState,
+  addWish,
+  removeWish,
+  getWishListState,
 } from "../redux/actions/wishlist_actions";
 
 import { toast } from "react-toastify";
 
 export const Wishlist = () => {
   const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
 
   const inputsAllSpacesRef = useRef(false);
   const wishlistState = useSelector((state) => state.wishlist);
@@ -24,12 +25,11 @@ export const Wishlist = () => {
     const handleKeypress = (e) => {
       if (e.keyCode === 27) {
         setTitle("");
-        setAuthor("");
       }
     };
     document.addEventListener("keyup", handleKeypress);
 
-    fetch();
+    dispatch(getWishListState());
 
     return () => {
       document.removeEventListener("keyup", handleKeypress);
@@ -37,33 +37,12 @@ export const Wishlist = () => {
   }, []);
 
   useEffect(() => {
-    if (title.length && !title.trim() && author.length && !author.trim()) {
+    if (title.length && !title.trim()) {
       inputsAllSpacesRef.current = true;
     } else {
       inputsAllSpacesRef.current = false;
     }
-  }, [title, author]);
-
-  async function fetch() {
-    const response = await axios.get(
-      `${process.env.REACT_APP_SERVER_HOST}/wishlist`,
-      {
-        params: {
-          user_id: id,
-        },
-      }
-    );
-
-    const { updated_at, id: wishlist_id, items } = response.data;
-
-    dispatch(
-      setWishListState({
-        items: items,
-        id: wishlist_id,
-        updatedAt: updated_at,
-      })
-    );
-  }
+  }, [title]);
 
   const handleRemove = async (item) => {
     console.log("r", item);
@@ -74,37 +53,7 @@ export const Wishlist = () => {
       `${process.env.REACT_APP_SERVER_HOST}/wishlist_items/${id}`
     );
 
-    fetch();
-  };
-
-  const markAsOwned = (item) => {
-    console.log("item", item);
-
-    dispatch(addOwnedWish(item));
-  };
-
-  const removeAsOwned = (item) => {
-    console.log("item", item);
-
-    dispatch(removeOwnedWish(item));
-  };
-
-  const handleSubmit = async () => {
-    try {
-      await axios.post(`${process.env.REACT_APP_SERVER_HOST}/wishlist_items`, {
-        wishlist: {
-          wishlist_id: wishlistId,
-          title,
-          author,
-          thing_type: "Book",
-        },
-      });
-
-      fetch();
-    } catch (e) {
-      console.log(e, e.code);
-      toast.error(`Error: ${e.code}`);
-    }
+    dispatch(getWishListState());
   };
 
   const wishlistItems = get(wishlistState, "items", []);
@@ -131,7 +80,7 @@ export const Wishlist = () => {
               {!get(item, "owned", false) && (
                 <button
                   type="button"
-                  onClick={() => markAsOwned(item)}
+                  onClick={() => dispatch(addOwnedWish(item))}
                   className="button wishlist-button"
                 >
                   I Own This
@@ -157,7 +106,7 @@ export const Wishlist = () => {
                 <div>{get(item, "wish_val.book.title")}</div>
                 <button
                   type="button"
-                  onClick={() => removeAsOwned(item)}
+                  onClick={() => dispatch(removeOwnedWish(item))}
                   className="button wishlist-button"
                 >
                   Not Anymore!
@@ -169,20 +118,24 @@ export const Wishlist = () => {
           return null;
         })}
       </div>
-      <form onSubmit={handleSubmit} className="form">
+      <form className="form">
         <input
           type="text"
-          placeholder="Enter title"
+          placeholder="Enter book title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
-        <input
-          type="text"
-          placeholder="Enter author"
-          value={author}
-          onChange={(e) => setAuthor(e.target.value)}
-        />
-        <button onClick={handleSubmit} type="button" className="button">
+        <button
+          onClick={() =>
+            dispatch(
+              addWish(wishlistId, "Book", {
+                title,
+              })
+            )
+          }
+          type="button"
+          className="button"
+        >
           Submit
         </button>
         {/* {inputsAllSpacesRef.current && (
