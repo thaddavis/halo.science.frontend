@@ -44,6 +44,7 @@ export function ActionsContainer() {
           return (
             <div key={item.id} className="wishlist-item">
               <div>{get(item, "user.first_name")}</div>
+              &nbsp;|&nbsp;
               <div>{get(item, "book.title")}</div>
             </div>
           );

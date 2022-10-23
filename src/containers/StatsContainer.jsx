@@ -1,9 +1,12 @@
+import { FirstOwners } from "../components/Stats/FirstOwners";
+import { GenreStats } from "../components/Stats/GenreStats";
+
 export function StatsContainer() {
   return (
     <>
       <main>
-        <h2>Stats</h2>
-        <p>Coming Soon...</p>
+        <FirstOwners />
+        <GenreStats />
       </main>
     </>
   );
