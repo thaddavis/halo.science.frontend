@@ -15,8 +15,6 @@ export const addWish = (wishlistId, wishType, wishVal) => {
       });
 
       dispatch(getWishListState());
-
-      dispatch(getWishListState());
     } catch (e) {
       toast.error(`Error: ${e.code}`);
     }
@@ -81,7 +79,7 @@ export const getWishListState = () => {
       let user_id = get(getState(), "user.id", null);
 
       const response = await axios.get(
-        `${process.env.REACT_APP_SERVER_HOST}/wishlist`,
+        `${process.env.REACT_APP_SERVER_HOST}/wishlists`,
         {
           params: {
             user_id,

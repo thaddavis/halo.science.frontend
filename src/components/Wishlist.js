@@ -8,6 +8,7 @@ import {
   removeWish,
   getWishListState,
 } from "../redux/actions/wishlist_actions";
+import { markAsRead, unmarkAsRead } from "../redux/actions/book_actions";
 
 export const Wishlist = () => {
   const [title, setTitle] = useState("");
@@ -77,7 +78,28 @@ export const Wishlist = () => {
           if (item.owned) {
             return (
               <div key={item.id} className="wishlist-item">
-                <div>{get(item, "wish_val.book.title")}</div>
+                {get(item, "wish_type") && (
+                  <>
+                    <div>{get(item, "wish_val.book.title")}</div>
+                    {get(item, "wish_val.readings", []).length > 0 ? (
+                      <button
+                        type="button"
+                        onClick={() => dispatch(unmarkAsRead(item))}
+                        className="button wishlist-button"
+                      >
+                        Unmark As Read
+                      </button>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => dispatch(markAsRead(item))}
+                        className="button wishlist-button"
+                      >
+                        Mark As Read
+                      </button>
+                    )}
+                  </>
+                )}
                 <button
                   type="button"
                   onClick={() => dispatch(removeOwnedWish(item))}
