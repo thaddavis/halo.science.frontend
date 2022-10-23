@@ -7,8 +7,6 @@ import { getWishListState } from "./wishlist_actions";
 export const markAsRead = (book) => {
   return async function (dispatch, getState) {
     try {
-      console.log("markAsRead", "book", book);
-
       let state = getState();
       let user_id = get(state, "user.id", null);
       let book_id = get(book, "wish_val.book.id", null);
@@ -29,13 +27,7 @@ export const markAsRead = (book) => {
 export const unmarkAsRead = (book) => {
   return async function (dispatch, getState) {
     try {
-      console.log("unmarkAsRead", "book", book);
-
-      // let state = getState();
       let reading_id = get(book, "wish_val.readings.0.id", null);
-
-      console.log(reading_id);
-
       await axios.delete(
         `${process.env.REACT_APP_SERVER_HOST}/readings/${reading_id}`
       );
@@ -45,3 +37,29 @@ export const unmarkAsRead = (book) => {
     }
   };
 };
+
+export const searchReadingsForBook = (book_search_term) => {
+  return async function (dispatch, getState) {
+    try {
+      const response = await axios.post(
+        `${process.env.REACT_APP_SERVER_HOST}/search_readings`,
+        {
+          query: {
+            book_search_term: book_search_term,
+          },
+        }
+      );
+
+      const readings = response.data || [];
+
+      dispatch(setReadingsHistory(readings));
+    } catch (e) {
+      toast.error(`Error: ${e.code}`);
+    }
+  };
+};
+
+export const setReadingsHistory = (readings) => ({
+  type: "setReadingsHistory",
+  payload: readings,
+});
