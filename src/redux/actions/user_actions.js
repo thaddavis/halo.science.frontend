@@ -1,6 +1,6 @@
 import axios from "axios";
 import get from "lodash.get";
-import { toast } from "react-toastify";
+import { showError } from "../../utility/showError";
 
 import { getWishListState } from "./wishlist_actions";
 
@@ -18,7 +18,7 @@ export const giveAwayPossessions = (wishlistId, wishType, wishVal) => {
 
       dispatch(getWishListState());
     } catch (e) {
-      toast.error(`Error: ${e.code}`);
+      showError(e);
     }
   };
 };

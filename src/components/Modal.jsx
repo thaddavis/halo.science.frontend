@@ -6,6 +6,10 @@ export function Modal(props) {
 
   const { cancelAction, successAction } = props;
 
+  const handleSubmit = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <div
       className="relative z-10"
@@ -16,7 +20,7 @@ export function Modal(props) {
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
       <div className="fixed inset-0 z-10 overflow-y-auto">
-        <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+        <div className="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
           <div className="relative transform overflow-hidden rounded-lg bg-white px-4 pt-5 pb-4 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
             <div className="sm:mx-auto sm:w-full sm:max-w-md">
               <img
@@ -24,16 +28,16 @@ export function Modal(props) {
                 src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
                 alt="Your Company"
               />
-              <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
+              <h2 className="my-6 text-center text-3xl font-bold tracking-tight text-gray-900">
                 New wish
               </h2>
-              <form className="space-y-6">
+              <form className="space-y-6" onSubmit={handleSubmit}>
                 <div>
                   <label
                     htmlFor="location"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Wish Type
+                    Wish type
                   </label>
                   <select
                     id="location"
@@ -61,6 +65,7 @@ export function Modal(props) {
                       id="wish_type"
                       name="wish_type"
                       type="text"
+                      placeholder="Your wish"
                       value={wishVal}
                       onChange={(e) => setWishVal(e.target.value)}
                       className="block w-full appearance-none rounded-md border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
@@ -73,7 +78,7 @@ export function Modal(props) {
             <div className="mt-5 sm:mt-6 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
               <button
                 type="button"
-                className="mt-3 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
+                className="my-2 inline-flex w-full justify-center rounded-md border border-gray-300 bg-white px-4 py-2 text-base font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:col-start-1 sm:mt-0 sm:text-sm"
                 onClick={cancelAction}
               >
                 Cancel

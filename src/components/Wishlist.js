@@ -8,133 +8,78 @@ import {
   removeWish,
   getWishListState,
 } from "../redux/actions/wishlist_actions";
-import { markAsRead, unmarkAsRead } from "../redux/actions/book_actions";
 
-export const Wishlist = () => {
-  const [title, setTitle] = useState("");
+import { BookCard } from "./wish_val_li_cards/Book";
+
+// import { markAsRead, unmarkAsRead } from "../redux/actions/book_actions";
+import { Modal } from "./Modal";
+
+export function Wishlist() {
   const wishlistState = useSelector((state) => state.wishlist);
-
   const dispatch = useDispatch();
 
+  const [modalOpen, setModalOpen] = useState(false);
+
   useEffect(() => {
-    const handleKeypress = (e) => {
-      if (e.keyCode === 27) {
-        setTitle("");
-      }
-    };
-    document.addEventListener("keyup", handleKeypress);
-
     dispatch(getWishListState());
-
-    return () => {
-      document.removeEventListener("keyup", handleKeypress);
-    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const wishlistItems = get(wishlistState, "items", []);
-  const wishlistLastUpdatedAt = get(wishlistState, "updatedAt", null);
   const wishlistId = get(wishlistState, "id", null);
 
   return (
-    <div className="container" style={{ backgroundColor: "white" }}>
-      <h1>
-        My Wishlist &nbsp;
-        <small className="hint">
-          {wishlistLastUpdatedAt && wishlistLastUpdatedAt.toString()}
-        </small>
-      </h1>
-      <div>
-        {wishlistItems.map((item) => {
-          return (
-            <div key={item.id} className="wishlist-item">
-              <div>
-                {get(item, "wish_type", null)} - "
-                {get(item, "wish_val.book.title", null)}" by{" "}
-                {get(item, "wish_val.author.first_name", null)}
-              </div>
-              {!get(item, "owned", false) && (
-                <button
-                  type="button"
-                  onClick={() => dispatch(addOwnedWish(item))}
-                  className="button wishlist-button"
-                >
-                  I Own This
-                </button>
-              )}
-              <button
-                type="button"
-                onClick={() => dispatch(removeWish(item))}
-                className="button wishlist-button"
-              >
-                Remove
-              </button>
-            </div>
-          );
-        })}
-      </div>
-      <h2>Owned Wishes</h2>
-      <div>
-        {wishlistItems.map((item) => {
-          if (item.owned) {
-            return (
-              <div key={item.id} className="wishlist-item">
-                {get(item, "wish_type") && (
-                  <>
-                    <div>{get(item, "wish_val.book.title")}</div>
-                    {get(item, "wish_val.readings", []).length > 0 ? (
-                      <button
-                        type="button"
-                        onClick={() => dispatch(unmarkAsRead(item))}
-                        className="button wishlist-button"
-                      >
-                        Unmark As Read
-                      </button>
-                    ) : (
-                      <button
-                        type="button"
-                        onClick={() => dispatch(markAsRead(item))}
-                        className="button wishlist-button"
-                      >
-                        Mark As Read
-                      </button>
-                    )}
-                  </>
-                )}
-                <button
-                  type="button"
-                  onClick={() => dispatch(removeOwnedWish(item))}
-                  className="button wishlist-button"
-                >
-                  Not Anymore!
-                </button>
-              </div>
-            );
-          }
-
-          return null;
-        })}
-      </div>
-      <form className="form">
-        <input
-          type="text"
-          placeholder="What would you like?"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <button
-          onClick={() =>
+    <>
+      {modalOpen && (
+        <Modal
+          cancelAction={() => setModalOpen(!modalOpen)}
+          successAction={(wish_type, wish_val) => {
+            console.log("successAction");
             dispatch(
-              addWish(wishlistId, "Book", {
-                title,
+              addWish(wishlistId, wish_type, {
+                title: wish_val,
               })
-            )
-          }
-          type="button"
-          className="button"
-        >
-          Submit
-        </button>
-      </form>
-    </div>
+            );
+            setModalOpen(!modalOpen);
+          }}
+        />
+      )}
+      <div className="px-4 sm:px-6 lg:px-8 py-2">
+        <div className="sm:flex sm:items-center py-4">
+          <div className="sm:flex-auto">
+            {/* <h1 className="text-xl font-semibold text-gray-900">Wishlist</h1> */}
+          </div>
+          <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <button
+              type="button"
+              className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+              onClick={() => setModalOpen(!modalOpen)}
+            >
+              New wish
+            </button>
+          </div>
+        </div>
+        <ul className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          {wishlistItems.map((item) => {
+            let wish_val_ui;
+            switch (get(item, "wish_type", null)) {
+              case "Book":
+                wish_val_ui = BookCard(
+                  item,
+                  !get(item, "owned", false)
+                    ? () => dispatch(addOwnedWish(item))
+                    : () => dispatch(removeOwnedWish(item)),
+                  () => dispatch(removeWish(item))
+                );
+                break;
+              default:
+                wish_val_ui = "UNSUPPORTED WISH TYPE";
+            }
+
+            return wish_val_ui;
+          })}
+        </ul>
+      </div>
+    </>
   );
-};
+}

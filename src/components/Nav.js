@@ -81,7 +81,10 @@ export function Nav() {
                     text-sm
                     font-medium
                   `}
-                  onClick={() => navigate("/")}
+                  onClick={() => {
+                    setIsOpen(false);
+                    navigate("/");
+                  }}
                 >
                   Home
                 </button>
@@ -99,7 +102,10 @@ export function Nav() {
                     text-sm
                     font-medium
                   `}
-                  onClick={() => navigate("/wishlist")}
+                  onClick={() => {
+                    setIsOpen(false);
+                    navigate("/wishlist");
+                  }}
                 >
                   Wishlist
                 </button>
@@ -117,7 +123,10 @@ export function Nav() {
                     text-sm
                     font-medium
                   `}
-                  onClick={() => navigate("/stats")}
+                  onClick={() => {
+                    setIsOpen(false);
+                    navigate("/stats");
+                  }}
                 >
                   Stats
                 </button>
@@ -161,7 +170,10 @@ export function Nav() {
                 text-base
                 font-medium
               `}
-              onClick={() => navigate("/")}
+              onClick={() => {
+                setIsOpen(false);
+                navigate("/");
+              }}
             >
               Home
             </button>
@@ -180,7 +192,10 @@ export function Nav() {
                 text-base
                 font-medium
               `}
-              onClick={() => navigate("/wishlist")}
+              onClick={() => {
+                setIsOpen(false);
+                navigate("/wishlist");
+              }}
             >
               Wishlist
             </button>
@@ -199,12 +214,15 @@ export function Nav() {
                 text-base
                 font-medium
               `}
-              onClick={() => navigate("/stats")}
+              onClick={() => {
+                setIsOpen(false);
+                navigate("/stats");
+              }}
             >
               Stats
             </button>
 
-            <button
+            {/* <button
               className={`
                 ${
                   pathname === "/actions"
@@ -221,7 +239,7 @@ export function Nav() {
               onClick={() => navigate("/actions")}
             >
               Actions
-            </button>
+            </button> */}
           </div>
         </div>
       )}

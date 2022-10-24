@@ -1,6 +1,6 @@
 import axios from "axios";
 import get from "lodash.get";
-import { toast } from "react-toastify";
+import { showError } from "../../utility/showError";
 
 import { getWishListState } from "./wishlist_actions";
 
@@ -19,7 +19,7 @@ export const markAsRead = (book) => {
       });
       dispatch(getWishListState());
     } catch (e) {
-      toast.error(`Error: ${e.code}`);
+      showError(e);
     }
   };
 };
@@ -33,7 +33,7 @@ export const unmarkAsRead = (book) => {
       );
       dispatch(getWishListState());
     } catch (e) {
-      toast.error(`Error: ${e.code}`);
+      showError(e);
     }
   };
 };
@@ -54,7 +54,7 @@ export const searchReadingsForBook = (book_search_term) => {
 
       dispatch(setReadingsHistory(readings));
     } catch (e) {
-      toast.error(`Error: ${e.code}`);
+      showError(e);
     }
   };
 };
@@ -70,7 +70,7 @@ export const getFirstOwners = () => {
 
       dispatch(setFirstOwners(firstOwners));
     } catch (e) {
-      toast.error(`Error: ${e.code}`);
+      showError(e);
     }
   };
 };
@@ -90,7 +90,7 @@ export const getGenreStats = (genre) => {
 
       dispatch(setGenreStats(genreStats));
     } catch (e) {
-      toast.error(`Error: ${e.code}`);
+      showError(e);
     }
   };
 };

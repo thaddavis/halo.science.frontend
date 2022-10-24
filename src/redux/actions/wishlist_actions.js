@@ -1,6 +1,6 @@
 import axios from "axios";
 import get from "lodash.get";
-import { toast } from "react-toastify";
+import { showError } from "../../utility/showError";
 
 export const addWish = (wishlistId, wishType, wishVal) => {
   return async function (dispatch, getState) {
@@ -16,7 +16,7 @@ export const addWish = (wishlistId, wishType, wishVal) => {
 
       dispatch(getWishListState());
     } catch (e) {
-      toast.error(`Error: ${e.code}`);
+      showError(e);
     }
   };
 };
@@ -32,7 +32,7 @@ export const removeWish = (item) => {
 
       dispatch(getWishListState());
     } catch (e) {
-      toast.error(`Error: ${e.code}`);
+      showError(e);
     }
   };
 };
@@ -51,7 +51,7 @@ export const addOwnedWish = (wishlist_item) => {
 
       dispatch(getWishListState());
     } catch (e) {
-      toast.error(`Error: ${e.code}`);
+      showError(e);
     }
   };
 };
@@ -59,7 +59,7 @@ export const addOwnedWish = (wishlist_item) => {
 export const removeOwnedWish = (wishlist_item) => {
   return async function (dispatch, getState) {
     try {
-      let user_id = get(getState(), "user.id", null);
+      // let user_id = get(getState(), "user.id", null);
       let owned_id = get(wishlist_item, "owned_id", null);
 
       await axios.delete(
@@ -68,7 +68,7 @@ export const removeOwnedWish = (wishlist_item) => {
 
       dispatch(getWishListState());
     } catch (e) {
-      toast.error(`Error: ${e.code}`);
+      showError(e);
     }
   };
 };
@@ -98,7 +98,7 @@ export const getWishListState = () => {
         },
       });
     } catch (e) {
-      toast.error(`Error: ${e.code}`);
+      showError(e);
     }
   };
 };
