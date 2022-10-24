@@ -122,7 +122,7 @@ export function Nav() {
                   Stats
                 </button>
 
-                <button
+                {/* <button
                   className={`
                     ${
                       pathname === "/actions"
@@ -138,7 +138,7 @@ export function Nav() {
                   onClick={() => navigate("/actions")}
                 >
                   Actions
-                </button>
+                </button> */}
               </div>
             </div>
           </div>
