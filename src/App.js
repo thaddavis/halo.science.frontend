@@ -1,4 +1,4 @@
-import { Link, Routes, Route, Outlet } from "react-router-dom";
+import { Routes, Route, Outlet } from "react-router-dom";
 import { HomeContainer } from "./containers/HomeContainer";
 import { WishlistContainer } from "./containers/WishlistContainer";
 import { StatsContainer } from "./containers/StatsContainer";
@@ -6,21 +6,14 @@ import { ActionsContainer } from "./containers/ActionsContainer";
 
 import { ToastContainer } from "react-toastify";
 
-import "./styles.css";
+import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
+import { Nav } from "./components/Nav";
 
 function App() {
   return (
     <>
-      <nav>
-        <Link to="/">Home</Link>
-        &nbsp;|&nbsp;
-        <Link to="/wishlist">Wishlist</Link>
-        &nbsp;|&nbsp;
-        <Link to="/stats">Stats</Link>
-        &nbsp;|&nbsp;
-        <Link to="/actions">Actions</Link>
-      </nav>
+      <Nav />
       <Routes>
         <Route path="/" element={<HomeContainer />} />
         <Route path="/wishlist" element={<WishlistContainer />} />
