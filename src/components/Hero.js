@@ -19,7 +19,7 @@ export function Hero() {
                   Wishbliss
                 </h1>
                 <p className="mt-6 text-xl text-gray-500">
-                  It's amazing how far asking can take you
+                  It's amazing how far asking can take you!
                 </p>
               </div>
             </div>
