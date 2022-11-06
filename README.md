@@ -12,7 +12,7 @@ https://tailwindcss.com/docs/guides/create-react-app
 - npm run build
 - docker build -t thaddavis/react-docker .
 - docker run -d -p 3000:80 thaddavis/react-docker
-- docker push thaddavis/react-docker:v1
+- docker push thaddavis/react-docker:v5
 
 - kubectl apply -f deployment.yaml
 

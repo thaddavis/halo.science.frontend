@@ -2,14 +2,22 @@ apiVersion: v1
 kind: Service
 metadata:
   name: frontend-load-balancer
+  namespace: react-docker
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-ssl-cert: arn:aws:acm:us-east-1:333427308013:certificate/facfbcc0-8932-4e4b-9825-477976cb76a5
+    service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "443"
   labels:
     app: react-docker
 spec:
   type: LoadBalancer
   ports:
     - port: 80
+      name: http
       targetPort: 80
       protocol: TCP
-      nodePort: 31000
+    - port: 443
+      name: https
+      targetPort: 80
+      protocol: TCP
   selector:
     app: react-docker
