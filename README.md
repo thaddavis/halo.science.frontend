@@ -17,5 +17,5 @@ https://tailwindcss.com/docs/guides/create-react-app
 - kubectl apply -f deployment.yaml
 
 
-- docker build -t thaddavis/ruby-docker:v22 .
-- docker push thaddavis/ruby-docker:v22
+- docker build -t thaddavis/react-docker:v23 .
+- docker push thaddavis/react-docker:v23
