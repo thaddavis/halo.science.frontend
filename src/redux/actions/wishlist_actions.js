@@ -78,6 +78,8 @@ export const getWishListState = () => {
     try {
       let user_id = get(getState(), "user.id", null);
 
+      console.log('user_id', user_id)
+
       const response = await axios.get(
         `${process.env.REACT_APP_SERVER_HOST}/wishlists`,
         {

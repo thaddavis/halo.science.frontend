@@ -13,8 +13,18 @@ import { GenreStatsV2 } from "./components/Stats/GenreStats";
 
 import "./index.css";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { getUsers } from './redux/actions/user_actions'
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getUsers())
+  })
+
   return (
     <>
       <Nav />

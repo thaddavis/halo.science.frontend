@@ -16,14 +16,17 @@ import { Modal } from "./Modal";
 
 export function Wishlist() {
   const wishlistState = useSelector((state) => state.wishlist);
+  const userState = useSelector((state) => state.user);
   const dispatch = useDispatch();
 
   const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
-    dispatch(getWishListState());
+    console.log(userState)
+    
+    if (userState.id) dispatch(getWishListState());
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [userState]);
 
   const wishlistItems = get(wishlistState, "items", []);
   const wishlistId = get(wishlistState, "id", null);

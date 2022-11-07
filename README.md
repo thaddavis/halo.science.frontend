@@ -10,12 +10,12 @@ https://tailwindcss.com/docs/guides/create-react-app
 - minikube start
 - https://blog.logrocket.com/deploy-react-app-kubernetes-using-docker/
 - npm run build
-- docker build -t thaddavis/react-docker .
+- docker build -t thaddavis/react-docker:v11 .
 - docker run -d -p 3000:80 thaddavis/react-docker
-- docker push thaddavis/react-docker:v5
+- docker push thaddavis/react-docker:v11
 
 - kubectl apply -f deployment.yaml
 
 
-- docker build -t thaddavis/react-docker:v4 .
-- docker push thaddavis/react-docker:v4
+- docker build -t thaddavis/ruby-docker:v22 .
+- docker push thaddavis/ruby-docker:v22
